@@ -9,23 +9,28 @@ import java.util.zip.ZipInputStream;
 import static java.lang.System.exit;
 
 public class ExtractJar {
+      private static List<String> classNames;
 
       public static void main(String[] args) {
             int count = 1;
             System.out.println("Processing...");
-            String jarURL = args[0];
-            List<String> classNames = extractJar(jarURL);
-            System.out.println("Total Number of Classes: " + classNames.size());
-            for (String classFile : classNames) {
-                  System.out.println("Class " + count + " : " + classFile);
-                  count++;
+            try {
+                  String jarURL = args[0];
+                  classNames = extractJar(jarURL);
+                  System.out.println("Total Number of Classes: " + classNames.size());
+                  for (String classFile : classNames) {
+                        System.out.println("Class " + count + " : " + classFile);
+                        count++;
+                  }
             }
-
+            catch (ArrayIndexOutOfBoundsException e) {
+                  System.out.println("arguments needed to continue...");
+            }
       }
 
-      public static List<String> extractJar(String path) {
+      private static List<String> extractJar(String path) {
             List<String> classNames = new ArrayList<>();
-            ZipInputStream zip = null;
+            ZipInputStream zip;
             try {
                   zip = new ZipInputStream(new FileInputStream(path));
                   for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
